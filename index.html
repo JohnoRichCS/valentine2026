@@ -26,6 +26,7 @@ body{
   overflow:hidden;
 }
 
+/* ===== hearts background (behind everything) ===== */
 #heartsLayer{
   position:fixed;
   inset:0;
@@ -36,16 +37,22 @@ body{
 }
 .heart{
   position:absolute;
-  top:-10vh;
-  width:28px;
+  top:-12vh;
+  width:26px;
+  height:auto;
+  opacity:.85;
+  /* If your heart.png has a weird “box” background, these help visually */
+  mix-blend-mode:multiply;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.08));
   animation: fall linear infinite;
 }
 @keyframes fall{
-  to { transform: translateY(120vh) rotate(360deg); }
+  to { transform: translateY(125vh) rotate(360deg); }
 }
 
+/* ===== card ===== */
 .card{
-  width:min(820px, 92vw);
+  width:min(900px, 92vw);
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
@@ -60,6 +67,7 @@ h1{
   font-size: clamp(22px, 3vw, 34px);
 }
 
+/* ===== normal mode ===== */
 .layout{
   display:grid;
   gap:14px;
@@ -72,11 +80,13 @@ h1{
   border-radius:18px;
   overflow:hidden;
   background:#f2f2f2;
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
 }
 .mediaWrap img{
   width:100%;
   height:100%;
   object-fit:cover;
+  display:block;
 }
 
 .caption{
@@ -84,13 +94,19 @@ h1{
   color:#3a3a3a;
   font-size:17px;
   font-weight:600;
-  min-height:44px;
+  line-height:1.35;
+  min-height:86px;          /* bigger so long captions show */
+  max-width: min(680px, 92%);
+  padding: 0 10px;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .btnRow{
   display:flex;
   gap:12px;
   justify-content:center;
+  flex-wrap:wrap;
 }
 button{
   border:0;
@@ -98,168 +114,395 @@ button{
   padding:12px 18px;
   font-size:16px;
   cursor:pointer;
+  user-select:none;
+  transition: transform .12s ease;
 }
-#yesBtn{ background:var(--accent); color:white; }
+button:active{ transform: scale(.98); }
+
+#yesBtn{ background:var(--accent); color:white; box-shadow: 0 12px 18px rgba(255,77,109,.22); }
 #noBtn{ background:#e9ecef; }
 
-#celebration{ display:none; position:relative; min-height:520px; }
+/* ===== celebration ===== */
+#celebration{ display:none; }
 
-.celeCenter{
-  width:min(420px, 92%);
-  margin:auto;
+/* spread gifs cleanly (no overlap) */
+.celeGrid{
+  display:grid;
+  grid-template-columns: 170px 1fr 170px;
+  grid-template-rows: auto auto;
+  gap:18px;
+  align-items:center;
+  justify-items:center;
+}
+
+.centerBlock{
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width:min(440px, 100%);
   text-align:center;
-  position:relative;
   z-index:6;
 }
+
+.centerMedia{
+  width:min(440px, 100%);
+  aspect-ratio:1/1;
+  border-radius:18px;
+  overflow:hidden;
+  background:#f2f2f2;
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+}
+.centerMedia img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
 .celeCaption{
   margin-top:12px;
-  font-size:18px;
-  font-weight:650;
+  font-size: 18px;
+  font-weight: 750;
+  color:#232323;
+  line-height:1.25;
 }
 
-.floatGif{
-  position:absolute;
-  width:140px;
-  height:140px;
-  border-radius:16px;
+/* gif tiles */
+.tile{
+  width:160px;
+  height:160px;
+  border-radius:18px;
   overflow:hidden;
   box-shadow: 0 12px 22px rgba(0,0,0,.12);
-  animation: floaty 2.8s ease-in-out infinite;
+  background:#fff;
+  animation: floaty 2.9s ease-in-out infinite;
 }
-.floatGif img{ width:100%; height:100%; object-fit:cover; }
-
-@keyframes floaty {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+.tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
-
-.p1{ left:2%; top:8%; animation-duration:2.6s;}
-.p2{ right:2%; top:8%; animation-duration:3.1s;}
-.p3{ left:4%; top:42%; animation-duration:2.9s;}
-.p4{ right:4%; top:42%; animation-duration:3.3s;}
-.p5{ left:10%; bottom:6%; animation-duration:2.7s;}
-.p6{ right:10%; bottom:6%; animation-duration:3.2s;}
-.p7{ left:50%; bottom:4%; margin-left:-70px; animation-duration:3s;}
-
-.shake{ animation: shake .45s ease-in-out; }
-@keyframes shake{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(-12px,8px)}
-  50%{transform:translate(12px,-8px)}
-  75%{transform:translate(-10px,6px)}
-  100%{transform:translate(0,0)}
+@keyframes floaty{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-10px); }
 }
 
-.fadeIn{ opacity:0; animation:fadeIn 2.6s forwards; }
-@keyframes fadeIn{ to{opacity:1;} }
+/* slight variation so they don't sync */
+.t1{ animation-duration:2.6s; }
+.t2{ animation-duration:3.0s; }
+.t3{ animation-duration:3.2s; }
+.t4{ animation-duration:2.8s; }
+.t5{ animation-duration:3.3s; }
+.t6{ animation-duration:2.7s; }
+.t7{ animation-duration:3.1s; }
+
+/* positions in grid */
+.leftTop{ grid-column:1; grid-row:1; }
+.leftMid{ grid-column:1; grid-row:2; }
+.leftBot{ grid-column:1; grid-row:3; } /* (will only show on mobile stacking) */
+
+.rightTop{ grid-column:3; grid-row:1; }
+.rightMid{ grid-column:3; grid-row:2; }
+
+.bottomRow{
+  grid-column: 1 / span 3;
+  grid-row: 3;
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* start over button */
+#restartBtn{
+  background:#111;
+  color:#fff;
+  margin-top: 14px;
+  padding:10px 16px;
+  font-size: 14px;
+  opacity:.9;
+}
+#restartBtn:hover{ opacity:1; }
+
+/* mobile: stack */
+@media (max-width: 760px){
+  .celeGrid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .centerBlock{ grid-column:1; grid-row:auto; }
+  .leftTop,.leftMid,.rightTop,.rightMid{ grid-column:1; grid-row:auto; }
+  .bottomRow{ grid-column:1; grid-row:auto; }
+  .tile{ width:min(78vw, 240px); height:200px; }
+}
+
+/* ===== NO step effects ===== */
+
+/* continuous shake (alex step) */
+.shakeLoop{
+  animation: shakeLoop .22s linear infinite;
+}
+@keyframes shakeLoop{
+  0%{ transform: translate(0,0) rotate(0); }
+  20%{ transform: translate(-10px, 8px) rotate(-1deg); }
+  40%{ transform: translate(12px, -10px) rotate(1deg); }
+  60%{ transform: translate(-12px, 10px) rotate(-1deg); }
+  80%{ transform: translate(10px, -8px) rotate(1deg); }
+  100%{ transform: translate(0,0) rotate(0); }
+}
+
+/* dramatic zoom on main image (alex step) */
+.zoomIn{
+  transform-origin: center;
+  animation: zoomIn 1.2s ease forwards;
+}
+@keyframes zoomIn{
+  from{ transform: scale(1); }
+  to{ transform: scale(1.22); }
+}
+
+/* fade in slow (chris step) */
+.fadeInSlow{
+  opacity:0;
+  animation: fadeIn 4.2s ease forwards;
+}
+@keyframes fadeIn{
+  to{ opacity:1; }
+}
 </style>
 </head>
 
 <body>
+  <div id="heartsLayer"></div>
 
-<div id="heartsLayer"></div>
+  <div class="card" id="card">
+    <h1 id="questionTitle">Do you want to be my Valentine?</h1>
 
-<div class="card" id="card">
-<h1 id="question">Do you want to be my Valentine?</h1>
+    <!-- NORMAL MODE -->
+    <div id="normalMode" class="layout">
+      <div class="mediaWrap">
+        <img id="mainImg" src="rose.gif" alt="main">
+      </div>
 
-<div id="normalMode" class="layout">
-<div class="mediaWrap">
-<img id="mainImg" src="rose.gif">
-</div>
+      <div class="caption" id="caption"></div>
 
-<div class="caption" id="caption"></div>
+      <div class="btnRow">
+        <button id="yesBtn">YES</button>
+        <button id="noBtn">NO</button>
+      </div>
+    </div>
 
-<div class="btnRow">
-<button id="yesBtn">YES</button>
-<button id="noBtn">NO</button>
-</div>
-</div>
+    <!-- CELEBRATION MODE -->
+    <div id="celebration">
+      <div class="celeGrid">
+        <div class="tile t1 leftTop"><img src="sponge.gif" alt=""></div>
+        <div class="tile t2 leftMid"><img src="pooh.gif" alt=""></div>
 
-<div id="celebration">
-<div class="celeCenter">
-<div class="mediaWrap"><img src="milk.gif"></div>
-<div class="celeCaption">AHHH HAPPY VALENTINE'S DAY!!! 🥰♥ ILY SM!!!!!!</div>
-</div>
+        <div class="centerBlock">
+          <div class="centerMedia">
+            <img id="centerImg" src="milk.gif" alt="milk">
+          </div>
+          <div class="celeCaption" id="celeCaption">
+            AHHH HAPPY VALENTINE'S DAY!!! 🥰♥ ILY SM!!!!!!
+          </div>
+          <button id="restartBtn">Start Over</button>
+        </div>
 
-<div class="floatGif p1"><img src="sponge.gif"></div>
-<div class="floatGif p2"><img src="pooh.gif"></div>
-<div class="floatGif p3"><img src="ppj.gif"></div>
-<div class="floatGif p4"><img src="milly.gif"></div>
-<div class="floatGif p5"><img src="mocha.gif"></div>
-<div class="floatGif p6"><img src="gru.gif"></div>
-<div class="floatGif p7"><img src="tooth.gif"></div>
-</div>
-</div>
+        <div class="tile t3 rightTop"><img src="ppj.gif" alt=""></div>
+        <div class="tile t4 rightMid"><img src="milly.gif" alt=""></div>
 
-<audio id="player"></audio>
+        <div class="bottomRow">
+          <div class="tile t5"><img src="mocha.gif" alt=""></div>
+          <div class="tile t6"><img src="gru.gif" alt=""></div>
+          <div class="tile t7"><img src="tooth.gif" alt=""></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="player" preload="auto"></audio>
 
 <script>
-const IMG_5053_FILE = "img_5053.jpeg";
+const IMG_5053_FILE = "IMG_5053.jpeg";
 
-const noSteps=[
-{img:"luther.jpg",audio:"among1.mp3",caption:"Wowww, you really pressed no? Must be a mistake 😅"},
-{img:"denzel.png",audio:"among2.mp3",caption:"You know what they say. Fool me once, shame on me. Fool me twice... stop playing around 😐"},
-{img:IMG_5053_FILE,audio:"among3.mp3",caption:"You really don't want to be my valentine that bad? 😞 Fine, press again to confirm it 🤷🏽‍♂️"},
-{img:"alex.jpg",audio:"among4.mp3",caption:"LISTEN UP YOU CHOCOLATE COVERED GIRAFFE 🤬 BE MY VALENTINE NOW!",shake:true},
-{img:"chris.jpg",audio:"chris.mp3",caption:"You asked for it, now its time to find out 🥊",fadeIn:true}
+const noSteps = [
+  {
+    img: "Luther.jpg",
+    audio: "among1.mp3",
+    caption: "Wowww, you really pressed no? Must be a mistake 😅"
+  },
+  {
+    img: "denzel.png",
+    audio: "among2.mp3",
+    caption: "You know what they say. Fool me once, shame on me. Fool me twice... I think you get the idea so stop playing around 😐"
+  },
+  {
+    img: IMG_5053_FILE,
+    audio: "among3.mp3",
+    caption: "You really don't want to be my valentine that bad? 😞 Fine, see if I care! Press again to confirm it 🤷🏽‍♂️"
+  },
+  {
+    img: "alex.jpg",
+    audio: "among4.mp3",
+    caption: "LISTEN UP YOU CHOCOLATE COVERED GIRAFFE 🤬, BE MY VALENTINE NOW OR SUFFER MY WRATH! (Last chance, I'm warning you)",
+    shake: true,
+    zoom: true
+  },
+  {
+    img: "chris.jpg",
+    audio: "chris.mp3",
+    caption: "You asked for it, now its time to fuck around and find out 🥊 This is going to hurt me more than it hurts you, buuut if you want flowers instead, I suggest you click yes 🥰",
+    fadeSlow: true
+  }
 ];
 
-let noCount=0;
-let celebrating=false;
+let noCount = 0;
+let celebrating = false;
 
-const mainImg=document.getElementById("mainImg");
-const caption=document.getElementById("caption");
-const yesBtn=document.getElementById("yesBtn");
-const noBtn=document.getElementById("noBtn");
-const player=document.getElementById("player");
-const card=document.getElementById("card");
+const mainImg = document.getElementById("mainImg");
+const caption = document.getElementById("caption");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const player = document.getElementById("player");
+const card = document.getElementById("card");
+const normalMode = document.getElementById("normalMode");
+const celebration = document.getElementById("celebration");
+const title = document.getElementById("questionTitle");
+const restartBtn = document.getElementById("restartBtn");
+
+function stopAllEffects(){
+  card.classList.remove("shakeLoop");
+  mainImg.classList.remove("zoomIn");
+  mainImg.classList.remove("fadeInSlow");
+}
 
 function playAudio(src){
-player.pause();
-player.currentTime=0;
-player.loop=false;
-player.src=src;
-player.play();
+  try{
+    player.pause();
+    player.currentTime = 0;
+    player.loop = false;     // default: no looping
+    player.src = src;
+    player.play();
+  }catch(e){}
 }
 
 function applyStep(i){
-const s=noSteps[i];
-mainImg.classList.remove("fadeIn");
-void mainImg.offsetWidth;
-mainImg.src=s.img;
-if(s.fadeIn) mainImg.classList.add("fadeIn");
-caption.textContent=s.caption;
-playAudio(s.audio);
-if(s.shake){ card.classList.add("shake"); setTimeout(()=>card.classList.remove("shake"),450); }
+  const s = noSteps[i];
+  if (!s) return;
+
+  stopAllEffects();
+
+  // reset image classes + force reflow so animation can replay
+  mainImg.className = "";
+  void mainImg.offsetWidth;
+
+  mainImg.src = s.img;
+
+  // chris slow fade
+  if (s.fadeSlow){
+    mainImg.classList.add("fadeInSlow");
+  }
+
+  // alex dramatic zoom + infinite shake
+  if (s.zoom){
+    mainImg.classList.add("zoomIn");
+  }
+  if (s.shake){
+    card.classList.add("shakeLoop"); // continuous until step changes
+  }
+
+  caption.textContent = s.caption;
+  playAudio(s.audio);
 }
 
-noBtn.onclick=()=>{
-if(celebrating) return;
-noCount++;
-applyStep(Math.min(noCount,noSteps.length)-1);
-};
+noBtn.addEventListener("click", () => {
+  if (celebrating) return;
+  noCount++;
+  const idx = Math.min(noCount, noSteps.length) - 1;
+  applyStep(idx);
+});
 
-yesBtn.onclick=()=>{
-celebrating=true;
-document.getElementById("normalMode").style.display="none";
-document.getElementById("celebration").style.display="block";
-player.loop=true;
-playAudio("valentine.mp3");
-startHearts();
-};
+yesBtn.addEventListener("click", () => {
+  if (celebrating) return;
+  celebrating = true;
+
+  stopAllEffects();
+
+  // change title
+  title.textContent = "I KNEW YOU'D SAY YES!";
+
+  // show celebration
+  normalMode.style.display = "none";
+  celebration.style.display = "block";
+
+  // loop YES audio
+  player.loop = true;
+  try{
+    player.pause();
+    player.currentTime = 0;
+    player.src = "valentine.mp3";
+    player.play();
+  }catch(e){}
+
+  startHearts();
+});
+
+restartBtn.addEventListener("click", () => {
+  // reset everything back to start
+  celebrating = false;
+  noCount = 0;
+
+  stopAllEffects();
+
+  // stop hearts
+  stopHearts();
+
+  // stop audio
+  try{
+    player.pause();
+    player.currentTime = 0;
+    player.loop = false;
+  }catch(e){}
+
+  // reset UI
+  title.textContent = "Do you want to be my Valentine?";
+  celebration.style.display = "none";
+  normalMode.style.display = "grid";
+  mainImg.src = "rose.gif";
+  caption.textContent = "";
+});
 
 function startHearts(){
-const layer=document.getElementById("heartsLayer");
-layer.style.display="block";
-for(let i=0;i<30;i++){
-const h=document.createElement("img");
-h.src="heart.png";
-h.className="heart";
-h.style.left=Math.random()*100+"vw";
-h.style.animationDuration=(3+Math.random()*4)+"s";
-layer.appendChild(h);
+  const layer = document.getElementById("heartsLayer");
+  layer.style.display = "block";
+  layer.innerHTML = "";
+
+  const heartCount = 34;
+  for (let i=0; i<heartCount; i++){
+    const h = document.createElement("img");
+    h.src = "heart.png";
+    h.className = "heart";
+
+    const left = Math.random() * 100;
+    const size = 18 + Math.random() * 28;
+    const duration = 3 + Math.random() * 5.2;
+    const delay = Math.random() * 3.2;
+    const opacity = 0.55 + Math.random() * 0.35;
+
+    h.style.left = left + "vw";
+    h.style.width = size + "px";
+    h.style.opacity = opacity;
+    h.style.animationDuration = duration + "s";
+    h.style.animationDelay = delay + "s";
+
+    layer.appendChild(h);
+  }
 }
+
+function stopHearts(){
+  const layer = document.getElementById("heartsLayer");
+  layer.style.display = "none";
+  layer.innerHTML = "";
 }
 </script>
 

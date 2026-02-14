@@ -35,16 +35,17 @@ body{
   overflow:hidden;
   display:none;
 }
+
+/* HEARTS ARE NOW EMOJI */
 .heart{
   position:absolute;
   top:-12vh;
-  width:26px;
-  height:auto;
-  opacity:.85;
-  /* If your heart.png has a weird “box” background, these help visually */
-  mix-blend-mode:multiply;
+  font-size: 22px;
+  line-height: 1;
+  opacity: .75;
   filter: drop-shadow(0 6px 8px rgba(0,0,0,.08));
   animation: fall linear infinite;
+  user-select:none;
 }
 @keyframes fall{
   to { transform: translateY(125vh) rotate(360deg); }
@@ -95,10 +96,9 @@ h1{
   font-size:17px;
   font-weight:600;
   line-height:1.35;
-  min-height:86px;          /* bigger so long captions show */
+  min-height:86px;
   max-width: min(680px, 92%);
   padding: 0 10px;
-  white-space: normal;
   word-break: break-word;
 }
 
@@ -125,7 +125,6 @@ button:active{ transform: scale(.98); }
 /* ===== celebration ===== */
 #celebration{ display:none; }
 
-/* spread gifs cleanly (no overlap) */
 .celeGrid{
   display:grid;
   grid-template-columns: 170px 1fr 170px;
@@ -166,7 +165,6 @@ button:active{ transform: scale(.98); }
   line-height:1.25;
 }
 
-/* gif tiles */
 .tile{
   width:160px;
   height:160px;
@@ -187,7 +185,6 @@ button:active{ transform: scale(.98); }
   50%{ transform: translateY(-10px); }
 }
 
-/* slight variation so they don't sync */
 .t1{ animation-duration:2.6s; }
 .t2{ animation-duration:3.0s; }
 .t3{ animation-duration:3.2s; }
@@ -196,11 +193,8 @@ button:active{ transform: scale(.98); }
 .t6{ animation-duration:2.7s; }
 .t7{ animation-duration:3.1s; }
 
-/* positions in grid */
 .leftTop{ grid-column:1; grid-row:1; }
 .leftMid{ grid-column:1; grid-row:2; }
-.leftBot{ grid-column:1; grid-row:3; } /* (will only show on mobile stacking) */
-
 .rightTop{ grid-column:3; grid-row:1; }
 .rightMid{ grid-column:3; grid-row:2; }
 
@@ -213,7 +207,6 @@ button:active{ transform: scale(.98); }
   flex-wrap:wrap;
 }
 
-/* start over button */
 #restartBtn{
   background:#111;
   color:#fff;
@@ -224,7 +217,6 @@ button:active{ transform: scale(.98); }
 }
 #restartBtn:hover{ opacity:1; }
 
-/* mobile: stack */
 @media (max-width: 760px){
   .celeGrid{
     grid-template-columns: 1fr;
@@ -238,16 +230,15 @@ button:active{ transform: scale(.98); }
 
 /* ===== NO step effects ===== */
 
-/* continuous shake (alex step) */
+/* calmer continuous shake (alex step) */
 .shakeLoop{
-  animation: shakeLoop .22s linear infinite;
+  animation: shakeLoop .35s linear infinite;
 }
 @keyframes shakeLoop{
   0%{ transform: translate(0,0) rotate(0); }
-  20%{ transform: translate(-10px, 8px) rotate(-1deg); }
-  40%{ transform: translate(12px, -10px) rotate(1deg); }
-  60%{ transform: translate(-12px, 10px) rotate(-1deg); }
-  80%{ transform: translate(10px, -8px) rotate(1deg); }
+  25%{ transform: translate(-3px, 2px) rotate(-.4deg); }
+  50%{ transform: translate(3px, -2px) rotate(.4deg); }
+  75%{ transform: translate(-2px, 2px) rotate(-.3deg); }
   100%{ transform: translate(0,0) rotate(0); }
 }
 
@@ -258,13 +249,13 @@ button:active{ transform: scale(.98); }
 }
 @keyframes zoomIn{
   from{ transform: scale(1); }
-  to{ transform: scale(1.22); }
+  to{ transform: scale(1.18); }
 }
 
 /* fade in slow (chris step) */
 .fadeInSlow{
   opacity:0;
-  animation: fadeIn 4.2s ease forwards;
+  animation: fadeIn 4.6s ease forwards;
 }
 @keyframes fadeIn{
   to{ opacity:1; }
@@ -278,7 +269,6 @@ button:active{ transform: scale(.98); }
   <div class="card" id="card">
     <h1 id="questionTitle">Do you want to be my Valentine?</h1>
 
-    <!-- NORMAL MODE -->
     <div id="normalMode" class="layout">
       <div class="mediaWrap">
         <img id="mainImg" src="rose.gif" alt="main">
@@ -292,7 +282,6 @@ button:active{ transform: scale(.98); }
       </div>
     </div>
 
-    <!-- CELEBRATION MODE -->
     <div id="celebration">
       <div class="celeGrid">
         <div class="tile t1 leftTop"><img src="sponge.gif" alt=""></div>
@@ -323,37 +312,21 @@ button:active{ transform: scale(.98); }
   <audio id="player" preload="auto"></audio>
 
 <script>
-const IMG_5053_FILE = "IMG_5053.jpeg";
+const IMG_5053_FILE = "img_5053.jpeg";
 
 const noSteps = [
-  {
-    img: "Luther.jpg",
-    audio: "among1.mp3",
-    caption: "Wowww, you really pressed no? Must be a mistake 😅"
-  },
-  {
-    img: "denzel.png",
-    audio: "among2.mp3",
-    caption: "You know what they say. Fool me once, shame on me. Fool me twice... I think you get the idea so stop playing around 😐"
-  },
-  {
-    img: IMG_5053_FILE,
-    audio: "among3.mp3",
-    caption: "You really don't want to be my valentine that bad? 😞 Fine, see if I care! Press again to confirm it 🤷🏽‍♂️"
-  },
-  {
-    img: "alex.jpg",
-    audio: "among4.mp3",
+  { img: "luther.jpg", audio: "among1.mp3",
+    caption: "Wowww, you really pressed no? Must be a mistake 😅" },
+  { img: "denzel.png", audio: "among2.mp3",
+    caption: "You know what they say. Fool me once, shame on me. Fool me twice... I think you get the idea so stop playing around 😐" },
+  { img: IMG_5053_FILE, audio: "among3.mp3",
+    caption: "You really don't want to be my valentine that bad? 😞 Fine, see if I care! Press again to confirm it 🤷🏽‍♂️" },
+  { img: "alex.jpg", audio: "among4.mp3",
     caption: "LISTEN UP YOU CHOCOLATE COVERED GIRAFFE 🤬, BE MY VALENTINE NOW OR SUFFER MY WRATH! (Last chance, I'm warning you)",
-    shake: true,
-    zoom: true
-  },
-  {
-    img: "chris.jpg",
-    audio: "chris.mp3",
+    shake: true, zoom: true },
+  { img: "chris.jpg", audio: "chris.mp3",
     caption: "You asked for it, now its time to fuck around and find out 🥊 This is going to hurt me more than it hurts you, buuut if you want flowers instead, I suggest you click yes 🥰",
-    fadeSlow: true
-  }
+    fadeSlow: true }
 ];
 
 let noCount = 0;
@@ -380,7 +353,7 @@ function playAudio(src){
   try{
     player.pause();
     player.currentTime = 0;
-    player.loop = false;     // default: no looping
+    player.loop = false;
     player.src = src;
     player.play();
   }catch(e){}
@@ -392,24 +365,15 @@ function applyStep(i){
 
   stopAllEffects();
 
-  // reset image classes + force reflow so animation can replay
+  // reset image classes + reflow
   mainImg.className = "";
   void mainImg.offsetWidth;
 
   mainImg.src = s.img;
 
-  // chris slow fade
-  if (s.fadeSlow){
-    mainImg.classList.add("fadeInSlow");
-  }
-
-  // alex dramatic zoom + infinite shake
-  if (s.zoom){
-    mainImg.classList.add("zoomIn");
-  }
-  if (s.shake){
-    card.classList.add("shakeLoop"); // continuous until step changes
-  }
+  if (s.fadeSlow) mainImg.classList.add("fadeInSlow");
+  if (s.zoom) mainImg.classList.add("zoomIn");
+  if (s.shake) card.classList.add("shakeLoop");
 
   caption.textContent = s.caption;
   playAudio(s.audio);
@@ -428,18 +392,15 @@ yesBtn.addEventListener("click", () => {
 
   stopAllEffects();
 
-  // change title
   title.textContent = "I KNEW YOU'D SAY YES!";
-
-  // show celebration
   normalMode.style.display = "none";
   celebration.style.display = "block";
 
   // loop YES audio
-  player.loop = true;
   try{
     player.pause();
     player.currentTime = 0;
+    player.loop = true;
     player.src = "valentine.mp3";
     player.play();
   }catch(e){}
@@ -448,23 +409,18 @@ yesBtn.addEventListener("click", () => {
 });
 
 restartBtn.addEventListener("click", () => {
-  // reset everything back to start
   celebrating = false;
   noCount = 0;
 
   stopAllEffects();
-
-  // stop hearts
   stopHearts();
 
-  // stop audio
   try{
     player.pause();
     player.currentTime = 0;
     player.loop = false;
   }catch(e){}
 
-  // reset UI
   title.textContent = "Do you want to be my Valentine?";
   celebration.style.display = "none";
   normalMode.style.display = "grid";
@@ -477,20 +433,20 @@ function startHearts(){
   layer.style.display = "block";
   layer.innerHTML = "";
 
-  const heartCount = 34;
-  for (let i=0; i<heartCount; i++){
-    const h = document.createElement("img");
-    h.src = "heart.png";
+  const count = 36;
+  for (let i=0; i<count; i++){
+    const h = document.createElement("span");
     h.className = "heart";
+    h.textContent = "♥";
 
     const left = Math.random() * 100;
-    const size = 18 + Math.random() * 28;
+    const size = 14 + Math.random() * 22;
     const duration = 3 + Math.random() * 5.2;
     const delay = Math.random() * 3.2;
-    const opacity = 0.55 + Math.random() * 0.35;
+    const opacity = 0.45 + Math.random() * 0.45;
 
     h.style.left = left + "vw";
-    h.style.width = size + "px";
+    h.style.fontSize = size + "px";
     h.style.opacity = opacity;
     h.style.animationDuration = duration + "s";
     h.style.animationDelay = delay + "s";
